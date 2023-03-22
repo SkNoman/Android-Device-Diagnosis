@@ -1,2 +1,10 @@
 
 .idea/gradle.xml
+*.lock
+*.bin
+*.bin
+*.bin
+*.bin
+*.gradle
+*.probe
+*.bin

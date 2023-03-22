@@ -11,20 +11,21 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
 import androidx.annotation.RequiresApi
+import com.example.shutdowntime.databinding.ActivityMainBinding
 import java.time.LocalDateTime
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var binding: ActivityMainBinding
     private val shutdownReceiver = object : BroadcastReceiver(){
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context?, intent: Intent?) {
             println("Hello world im shutting down")
-            Log.e("hello","See im down")
             val sharedPreferences = context?.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
             val editor = sharedPreferences?.edit()
             val currentTime = LocalDateTime.now()
-            Log.e("helloTime",currentTime.toString())
-            editor?.putString("time2", currentTime.toString())
+            println(currentTime.toString())
+            editor?.putString("shutdown_time", currentTime.toString())
             editor?.apply()
         }
     }
@@ -32,25 +33,21 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val shutDownFilter = IntentFilter(Intent.ACTION_SHUTDOWN)
         registerReceiver(shutdownReceiver,shutDownFilter)
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val savedTime = sharedPreferences.getString("time", "time")
-        val endTime = sharedPreferences.getString("time2","time2")
 
+        val savedTime = sharedPreferences.getString("boot_time", "")
+        val endTime = sharedPreferences.getString("shutdown_time","")
 
-        // Use the savedTime value as needed
-         Log.d("MainActivity", "Saved time: $savedTime")
+        println("Saved time: $savedTime,$endTime")
 
-        //hooks
-        val txtBootTime = findViewById<TextView>(R.id.txtBootTime)
-        val txtShutdownTime = findViewById<TextView>(R.id.shutdownTime)
-        txtBootTime.text = "Boot Time: " +savedTime.toString()
-        txtShutdownTime.text = "ShutDown Time: "+endTime.toString()
+        binding.txtBootTime.text = "Boot Time: " +savedTime.toString()
+        binding.shutdownTime.text = "ShutDown Time: "+endTime.toString()
 
 
     }
