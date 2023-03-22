@@ -8,3 +8,6 @@
 *.gradle
 *.probe
 *.bin
+*.lock
+*.bin
+*.lock

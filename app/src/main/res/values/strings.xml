@@ -1,3 +1,12 @@
 <resources>
-    <string name="app_name">ShutdownTime</string>
+    <string name="app_name">Device Diagnosis</string>
+    <string name="battery_status_while_shut_down">Battery Level While Shut Down:</string>
+    <string name="battery_health">Battery health</string>
+    <string name="battery_status">Battery status</string>
+    <string name="last_boot_time">Last Boot Time</string>
+    <string name="time">Time</string>
+    <string name="android_health_checker">Android Health Checker</string>
+    <string name="shutdown_information">Shutdown Information</string>
+    <string name="battery_level">Battery Level</string>
+    <string name="_77">77 %</string>
 </resources>

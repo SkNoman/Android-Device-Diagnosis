@@ -3,12 +3,8 @@ package com.example.shutdowntime
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.ACTION_SHUTDOWN
-import android.content.IntentFilter
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.startActivity
 import java.time.LocalDateTime
 
 class ShutdownReceiver : BroadcastReceiver() {
