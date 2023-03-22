@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.BatteryManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
@@ -95,12 +96,21 @@ class MainActivity : AppCompatActivity() {
         val batteryStatusS = sharedPreferences.getString("battery_status","N/A")
 
 
+
+
         binding.apply {
             txtBootTime.text = savedTime.toString()
             shutdownTime.text = endTime.toString()
             batteryLevel.text = "$batteryLevelS %"
             batteryHealth.text = batteryHealthS
             batteryStatus.text = batteryStatusS
+
+            if (batteryLevelS!!.toInt() <20){
+                batteryLevel.background.setTint(Color.RED)
+            }
+            if (batteryHealthS == "Dead"){
+                batteryHealth.background.setTint(Color.RED)
+            }
         }
 
 
