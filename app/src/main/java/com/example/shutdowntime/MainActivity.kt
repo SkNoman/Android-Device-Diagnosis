@@ -10,8 +10,10 @@ import android.os.BatteryManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.shutdowntime.databinding.ActivityMainBinding
+import com.example.shutdowntime.modules.SharedPref
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -101,15 +103,20 @@ class MainActivity : AppCompatActivity() {
 
         val sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
-        val savedTime = sharedPreferences.getString("boot_time", "N/A")
-        val endTime = sharedPreferences.getString("shutdown_time","N/A")
+        val savedTime = sharedPreferences.getString("boot_time", "0000-00-00T00:00:00.000")
+        val endTime = sharedPreferences.getString("shutdown_time","0000-00-00T00:00:00.000")
         val batteryLevelS = sharedPreferences.getString("battery_percentage_shutdown","N/A")
         val batteryHealthS = sharedPreferences.getString("battery_health","N/A")
         val batteryStatusS = sharedPreferences.getString("battery_status","N/A")
         val batteryTemperatureS = sharedPreferences.getString("battery_temperature","N/A")
 
+        if (savedTime.toString().isNotEmpty() && endTime.toString().isNotEmpty()){
+
+        }
         val bootDateTime =  simplifyDateTime(savedTime.toString())
         val shutdownDateTime = simplifyDateTime(endTime.toString())
+
+
 
         binding.apply {
             txtBootTime.text = "${bootDateTime.first} (${bootDateTime.second})"
@@ -119,12 +126,12 @@ class MainActivity : AppCompatActivity() {
             batteryStatus.text = batteryStatusS
             batteryTemperature.text = "$batteryTemperatureS °Celsius"
 
-            if (batteryLevelS!!.toInt() <20){
-                batteryLevel.background.setTint(Color.RED)
-            }
-            if (batteryHealthS == "Dead"){
-                batteryHealth.background.setTint(Color.RED)
-            }
+//            if (batteryLevelS!!.toInt() <20){
+//                batteryLevel.background.setTint(Color.RED)
+//            }
+//            if (batteryHealthS == "Dead"){
+//                batteryHealth.background.setTint(Color.RED)
+//            }
         }
     }
 

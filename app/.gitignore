@@ -1,6 +1,7 @@
 *.iml
 
 .gradle
+.gradle/7.4
 /build.gradle
 
 /local.properties

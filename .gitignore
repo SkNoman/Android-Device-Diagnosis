@@ -26,3 +26,5 @@
 .gradle/buildOutputCleanup/outputFiles.bin
 .gradle/file-system.probe
 .idea/gradle.xml
+*.lock
+*.bin
