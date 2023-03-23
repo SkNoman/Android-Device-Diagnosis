@@ -9,4 +9,6 @@
     <string name="shutdown_information">Shutdown Information</string>
     <string name="battery_level">Battery Level</string>
     <string name="_77">77 %</string>
+    <string name="battery_temperature">Battery Temperature</string>
+    <string name="_30_celsius">30 Celecius</string>
 </resources>

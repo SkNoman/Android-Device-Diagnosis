@@ -20,7 +20,6 @@ class ShutdownReceiver : BroadcastReceiver() {
             println(currentTime.toString())
             editor?.putString("boot_time", currentTime.toString())
             editor?.apply()
-
         }
     }
 
