@@ -5,15 +5,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Color
+import android.net.Uri
 import android.os.BatteryManager
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.PowerManager
+import android.provider.Settings
 import android.util.Log
+import android.view.KeyEvent
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import com.example.shutdowntime.databinding.ActivityMainBinding
-import com.example.shutdowntime.modules.SharedPref
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.util.*
@@ -92,12 +94,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n", "SimpleDateFormat")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val info = isBatteryOptimizationEnabled()
+        if (!info){
+            val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+            intent.data = Uri.parse("package:$packageName")
+            startActivityForResult(intent, 1234)
+        }
         val shutDownFilter = IntentFilter(Intent.ACTION_SHUTDOWN)
         registerReceiver(shutdownReceiver,shutDownFilter)
 
@@ -110,17 +119,23 @@ class MainActivity : AppCompatActivity() {
         val batteryStatusS = sharedPreferences.getString("battery_status","N/A")
         val batteryTemperatureS = sharedPreferences.getString("battery_temperature","N/A")
 
-        if (savedTime.toString().isNotEmpty() && endTime.toString().isNotEmpty()){
-
-        }
         val bootDateTime =  simplifyDateTime(savedTime.toString())
         val shutdownDateTime = simplifyDateTime(endTime.toString())
 
 
 
         binding.apply {
-            txtBootTime.text = "${bootDateTime.first} (${bootDateTime.second})"
-            shutdownTime.text = "${shutdownDateTime.first} (${shutdownDateTime.second})"
+            if (bootDateTime.first.contains("30-11-0002")){
+                txtBootTime.text = "N/A"
+            }else{
+                txtBootTime.text = "${bootDateTime.first} (${bootDateTime.second})"
+            }
+            if (shutdownDateTime.first.contains("30-11-0002")){
+                shutdownTime.text = "N/A"
+            }else{
+                shutdownTime.text = "${shutdownDateTime.first} (${shutdownDateTime.second})"
+            }
+
             batteryLevel.text = "$batteryLevelS %"
             batteryHealth.text = batteryHealthS
             batteryStatus.text = batteryStatusS
@@ -132,6 +147,7 @@ class MainActivity : AppCompatActivity() {
 //            if (batteryHealthS == "Dead"){
 //                batteryHealth.background.setTint(Color.RED)
 //            }
+
         }
     }
 
@@ -149,4 +165,38 @@ class MainActivity : AppCompatActivity() {
 
         return Pair(dateString.toString(),timeString.toString())
     }
+
+
+
+    override fun dispatchKeyEvent(event: KeyEvent?): Boolean {
+        Log.d("nlog-is-called", "dispatchKeyEvent() called")
+        if (event?.keyCode == KeyEvent.KEYCODE_POWER && event.action == KeyEvent.ACTION_DOWN) {
+            Log.e("nlog-long-press","yes")
+            return true
+        } else if (event?.keyCode == KeyEvent.KEYCODE_POWER && event.action == KeyEvent.ACTION_UP) {
+            Log.e("nlog-long-over","yes")
+            return true
+        }else if (event?.keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
+            // Handle volume down button press
+            Log.e("nlog-v-down","yes")
+            return true
+        } else if (event?.keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
+            // Handle volume down button press
+            Log.e("nlog-v-up","yes")
+            return true
+        }
+        return super.dispatchKeyEvent(event)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    @SuppressLint("ServiceCast")
+    private fun isBatteryOptimizationEnabled(): Boolean {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isIgnoringBatteryOptimizations(packageName)
+    }
+
+
+
+
+
 }

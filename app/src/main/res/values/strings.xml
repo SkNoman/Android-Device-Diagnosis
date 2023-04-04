@@ -12,4 +12,5 @@
     <string name="battery_temperature">Battery Temperature</string>
     <string name="_30_celsius">30 Celecius</string>
     <string name="boot_information">Boot Information</string>
+    <string name="information_complies_with_device_last_shutdown">Information Complies With Device Last Shutdown!</string>
 </resources>
